@@ -1,3 +1,127 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+
+    <!-- colors--> 
+    <material name="white">
+        <color rgba="1 1 1 1"/>
+    </material>
+
+    <material name="orange">
+        <color rgba="1 0.3 0.1 1"/>
+    </material>
+
+    <material name="blue">
+        <color rgba="0.2 0.2 1 1"/>
+    </material>
+
+    <!-- mesures--> 
+    <xacro:property name="base_size_x_half" value="0.0655" />
+    <xacro:property name="base_size_y_half" value="0.1905" />
+    <xacro:property name="base_size_z" value="0.026" />
+    <xacro:property name="link_z_size_x" value="0.019" />
+    <xacro:property name="link_z_size_y" value="0.038" />
+    <xacro:property name="link_z_size_z" value="0.14" />
+    <xacro:property name="link_x_size_x" value="0.092" />
+    <xacro:property name="link_x_size_y" value="0.038" />
+    <xacro:property name="link_x_size_z" value="0.025" />
+    <xacro:property name="link_y_size_x" value="0.045" />
+    <xacro:property name="link_y_size_y" value="0.3" />
+    <xacro:property name="link_y_size_z" value="0.01" />
+    <xacro:property name="x_offset" value="0.007" />
+    <xacro:property name="y_offset" value="0.006" />
+ 
+    <!-- links and bases--> 
+    <link name="base">
+        <visual>
+            <geometry>
+                <box size="${base_size_x_half * 2} ${base_size_y_half * 2} ${base_size_z}" />
+            </geometry>
+            <material name="orange" />
+        </visual>
+    </link>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base" />
+        <child link="link_z" />
+        <origin xyz="${base_size_x_half - link_z_size_x/2 - x_offset} -${base_size_y_half - link_z_size_y/2 - y_offset} 0.0" />
+    </joint>
+
+    <link name="link_z">
+        <visual>
+            <origin xyz="0 0 ${base_size_z/2 + link_z_size_z/2}" rpy="0.0 0.0 0.0"  />
+            <geometry>
+                <box size="${link_z_size_x} ${link_z_size_y} ${link_z_size_z}" />
+            </geometry>
+            <material name="white"/>
+        </visual>
+    </link>
+
+    <joint name="joint_zx" type="prismatic">
+        <origin xyz="0 0 ${base_size_z/2 + link_z_size_z/2}" />
+        <parent link="link_z" />
+        <child link="link_x" />
+        <axis xyz="0 0 1" />
+        <limit effort="100" lower="-${base_size_z/2 + link_z_size_z/2 - link_x_size_z}" upper="${base_size_z/2 + link_z_size_z/2 - link_x_size_z}" velocity="100"  />
+        
+    </joint>
+
+    <link name="link_x">
+        <visual>
+            <origin xyz="-${link_z_size_x/2 + link_x_size_x/2} 0 0" rpy="0 0 0"  />
+            <geometry>
+                <box size="${link_x_size_x} ${link_x_size_y} ${link_x_size_z}" />
+            </geometry>
+            <material name="white"/>
+        </visual>
+    </link>
+
+    <joint name="joint_xy" type="prismatic">
+        <parent link="link_x" />
+        <child link="link_y" />
+        <origin xyz="-${link_z_size_x/2 + link_x_size_x/2}  0 0" rpy="0 0 0" />
+        <axis xyz="1 0 0" />
+        <limit effort="1000.0" lower="-${link_z_size_x/2 + link_x_size_x/2 - link_z_size_x/2}" upper="${link_z_size_x/2 + link_x_size_x/2 - link_z_size_x/2}" velocity="0.5"  />        
+    </joint>
+
+    <link name="link_y">
+        <visual>
+            <origin xyz="0 ${link_y_size_y/2 + link_x_size_y/2}  0" />
+            <geometry>
+                <box size="${link_y_size_x} ${link_y_size_y} ${link_y_size_z}"  />
+            </geometry>
+            <material name="white"/>
+        </visual>
+    </link>
+
+    <!--joint name="joint_y" type="prismatic">
+        <parent link="link_y" />
+        <child link="needle" />
+        <origin xyz="0 0 ${link_y_size_z/2}" rpy="0 0 0" />
+        <axis xyz="0 1 0" />
+        <limit effort="1000.0" lower="0.045" upper="0.12" velocity="0.5"  />        
+    </joint>
+
+    <link name="needle">
+        <visual>
+            <origin xyz="0 -0.075 0" rpy="1.5708 0 0"/>
+            <geometry>
+                <cylinder radius="${needle_radius}" length = "${needle_length}" />
+            </geometry>
+            <material name="blue"/>
+        </visual>
+    </link-->
+
+  
+
+<xacro:property name="link_qty" value="2"/>
+<xacro:property name="link_length" value="${needle_length/ link_qty}"/>
+<xacro:property name="link_radius" value="${needle_radius}"/>
+<xacro:property name="link_mass" value="0.01"/>
+<xacro:property name="needle_radius" value="0.001" />
+<xacro:property name="needle_length" value="0.15" />
+
+
+
 <!-- Macro pour un maillon du serpent -->
 <xacro:macro name="needle_link" params="id">
     <link name="link_${id}">
@@ -10,9 +134,9 @@
         </visual>
     </link>
 
-    <!-- Joint pour se connecter au maillon racine ou précédent -->
+    <!-- Joint to connect to the root link or previous link -->
     <xacro:if value="${id == 1}">
-        <joint name="joint_needle" type="prismatic">
+            <joint name="joint_needle" type="prismatic">
             <parent link="link_y"/>
             <child link="link_${id}"/>
             <origin xyz="0 0 ${link_y_size_z/2}" rpy="0 0 0"/>
@@ -22,31 +146,14 @@
     </xacro:if>
 
     <xacro:unless value="${id == 1}">
-        <xacro:universal_joint id="${id}"/>
+        <joint name="joint_${id-1}_${id}" type="revolute">
+            <parent link="link_${id-1}"/>
+            <child link="link_${id}"/>
+            <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit effort="30" velocity="0.5" lower="-${needle_radius * 70}" upper="${needle_radius * 70}"/>
+        </joint>
     </xacro:unless>
-</xacro:macro>
-
-<xacro:macro name="universal_joint" params="id">
-    <!-- Premier joint revolute autour de l'axe X -->
-    <joint name="joint_${id}_x" type="revolute">
-        <parent link="link_${id-1}"/>
-        <child link="link_${id}_x"/>
-        <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
-        <axis xyz="1 0 0"/>
-        <limit effort="30" velocity="0.5"/>
-    </joint>
-    <link name="link_${id}_x">
-        <!-- vous pouvez ajouter des visuels si nécessaire -->
-    </link>
-    
-    <!-- Deuxième joint revolute autour de l'axe Z -->
-    <joint name="joint_${id}_z" type="revolute">
-        <parent link="link_${id}_x"/>
-        <child link="link_${id}"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <axis xyz="0 0 1"/>
-        <limit effort="30" velocity="0.5"/>
-    </joint>
 </xacro:macro>
 
 <xacro:macro name="generate_links" params="current_link max_link">
@@ -57,3 +164,7 @@
 </xacro:macro>
 
 <xacro:generate_links current_link="1" max_link="${link_qty}"/>
+
+
+
+</robot>
