@@ -1,7 +1,59 @@
-<?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
+<!-- Macro pour un maillon du serpent -->
+<xacro:macro name="needle_link" params="id">
+    <link name="link_${id}">
+        <visual>
+            <geometry>
+                <cylinder length="${link_length}" radius="${link_radius}"/>
+            </geometry>
+            <material name="blue"/>
+            <origin xyz="0 -0.075 0" rpy="0 1.5708 1.5708"/>
+        </visual>
+    </link>
 
-    <!-- Example link -->
-    <link name="base_link"></link>
+    <!-- Joint pour se connecter au maillon racine ou précédent -->
+    <xacro:if value="${id == 1}">
+        <joint name="joint_needle" type="prismatic">
+            <parent link="link_y"/>
+            <child link="link_${id}"/>
+            <origin xyz="0 0 ${link_y_size_z/2}" rpy="0 0 0"/>
+            <axis xyz="0 1 0"/>
+            <limit effort="1000" velocity="0.5" lower="${link_y_size_y}" upper="-0.04"/>
+        </joint>
+    </xacro:if>
 
-</robot>
+    <xacro:unless value="${id == 1}">
+        <xacro:universal_joint id="${id}"/>
+    </xacro:unless>
+</xacro:macro>
+
+<xacro:macro name="universal_joint" params="id">
+    <!-- Premier joint revolute autour de l'axe X -->
+    <joint name="joint_${id}_x" type="revolute">
+        <parent link="link_${id-1}"/>
+        <child link="link_${id}_x"/>
+        <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+        <axis xyz="1 0 0"/>
+        <limit effort="30" velocity="0.5"/>
+    </joint>
+    <link name="link_${id}_x">
+        <!-- vous pouvez ajouter des visuels si nécessaire -->
+    </link>
+    
+    <!-- Deuxième joint revolute autour de l'axe Z -->
+    <joint name="joint_${id}_z" type="revolute">
+        <parent link="link_${id}_x"/>
+        <child link="link_${id}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <limit effort="30" velocity="0.5"/>
+    </joint>
+</xacro:macro>
+
+<xacro:macro name="generate_links" params="current_link max_link">
+    <xacro:needle_link id="${current_link}"/>
+    <xacro:if value="${current_link != max_link}">
+        <xacro:generate_links current_link="${current_link + 1}" max_link="${max_link}"/>
+    </xacro:if>
+</xacro:macro>
+
+<xacro:generate_links current_link="1" max_link="${link_qty}"/>
