@@ -1,0 +1,116 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+    use_sim_time:
+     True
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    joint_zx_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    joint_xy_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    joint_needle_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+    #joint_id_x_trajectory_controller:
+      #type: joint_trajectory_controller/JointTrajectoryController
+    #joint_id_y_trajectory_controller:
+      #type: joint_trajectory_controller/JointTrajectoryController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint_xy
+      - joint_zx
+      - joint_needle
+      #- joint_${id}_x
+      #- joint_${id}_z
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_partial_joints_goal: true
+
+joint_zx_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint_zx
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_partial_joints_goal: true
+
+joint_xy_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint_xy
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_partial_joints_goal: true
+
+joint_needle_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint_needle
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_partial_joints_goal: true
+
+"""joint_id_x_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint_${id}_x
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_partial_joints_goal: true
+
+joint_id_z_trajectory_controller:
+  ros__parameters:
+    joints:
+      - joint_${id}_z
+    interface_name: position
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_partial_joints_goal: true"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
