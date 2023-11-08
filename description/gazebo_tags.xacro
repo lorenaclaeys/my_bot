@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+    
+
+    <xacro:property name="link_qty" value="5"/>
+    <xacro:macro name="add_joint_names" params="current_id max_id">
+        <xacro:if value="${current_id != max_id}">
+            <joint_name>joint_${current_id}_x</joint_name>
+            <joint_name>joint_${current_id}_z</joint_name>
+            <xacro:add_joint_names current_id="${current_id + 1}" max_id="${max_id}"/>
+        </xacro:if>
+    </xacro:macro>
+
+    <xacro:macro name="add_gazebo_links" params="current_id max_id">
+        <xacro:if value="${current_id != max_id}">
+            <gazebo reference="link_${current_id}">
+                <material>Gazebo/Blue</material>
+            </gazebo>
+            <xacro:add_gazebo_links current_id="${current_id + 1}" max_id="${max_id}"/>
+        </xacro:if>
+    </xacro:macro>
+
+
+    <gazebo>
+        <plugin name="gazebo_ros_joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+            <update_rate>20</update_rate>
+            <joint_name>joint_xy</joint_name>
+            <joint_name>joint_zx</joint_name>
+            <joint_name>joint_needle</joint_name>
+            <xacro:add_joint_names current_id="2" max_id="${link_qty}"/>
+        </plugin>
+    </gazebo>
+
+
+    <gazebo>
+        <plugin name="gazebo_ros_joint_pose_trajectory" filename="libgazebo_ros_joint_pose_trajectory.so">
+            <update_rate>20</update_rate>
+        </plugin>
+    </gazebo>
+
+
+    <gazebo reference="base">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+
+    <gazebo reference="link_z">
+        <material>Gazebo/White </material>
+    </gazebo>
+
+    <gazebo reference="link_x">
+        <material>Gazebo/White </material>
+    </gazebo>
+
+    <gazebo reference="link_y">
+        <material>Gazebo/White</material>
+    </gazebo>
+
+    <xacro:add_gazebo_links current_id="1" max_id="${link_qty}"/>
+
+
+</robot>
