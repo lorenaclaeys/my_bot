@@ -1,3 +1,4 @@
+controller_manager:
   ros__parameters:
     update_rate: 100  # Hz
     use_sim_time: true
@@ -14,43 +15,19 @@ joint_trajectory_controller:
       - joint_xy
       - joint_zx
       - joint_needle
-      - joint_2_x
-      - joint_2_z
-      - joint_3_x
-      - joint_3_z
-      - joint_4_x
-      - joint_4_z
-      - joint_5_x
-      - joint_5_z
-    
+      - link_2_aux_joint
+      - link_2_joint
+      - link_3_aux_joint
+      - link_3_joint
+      - link_4_aux_joint
+      - link_4_joint
+      - link_5_aux_joint
+      - link_5_joint
     command_interfaces:
       - position
     state_interfaces:
       - position
       - velocity
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
