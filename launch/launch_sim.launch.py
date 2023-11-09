@@ -6,13 +6,13 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-
+import xacro
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')   
     package_name='my_bot' 
     controller_params = os.path.join(
-        get_package_share_directory('my_bot',
+        get_package_share_directory('my_bot'),
         'config',
         'controller.yaml'
         )
@@ -44,9 +44,9 @@ def generate_launch_description():
 
     ctrl= Node(package="controller_manager",
             executable="ros2_control_node",
-            parameters=[{'robot_description': robot}, controller_params])
+            parameters=[{'robot_description': 'robot'}, controller_params])
 
-##tetxte
+
 
     # Launch them all!
     return LaunchDescription([
