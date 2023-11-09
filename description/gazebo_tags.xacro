@@ -27,7 +27,16 @@
             <joint_name>joint_xy</joint_name>
             <joint_name>joint_zx</joint_name>
             <joint_name>joint_needle</joint_name>
-            <xacro:add_joint_names current_id="2" max_id="${link_qty}"/>
+            <joint_name>joint_2_x</joint_name>
+            <joint_name>joint_3_x</joint_name>
+            <joint_name>joint_4_x</joint_name>
+            <joint_name>joint_5_x</joint_name>
+            <joint_name>joint_2_z</joint_name>
+            <joint_name>joint_3_z</joint_name>
+            <joint_name>joint_4_z</joint_name>
+            <joint_name>joint_5_z</joint_name>
+            
+            <!--xacro:add_joint_names current_id="5" max_id="${link_qty}"/-->
         </plugin>
     </gazebo>
 
@@ -54,8 +63,26 @@
     <gazebo reference="link_y">
         <material>Gazebo/White</material>
     </gazebo>
+    
+    <gazebo reference="link_1">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+    <gazebo reference="link_2">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+    <gazebo reference="link_3">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+    <gazebo reference="link_4">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+    <gazebo reference="link_5">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+            
+            
 
-    <xacro:add_gazebo_links current_id="1" max_id="${link_qty}"/>
+    <!--xacro:add_gazebo_links current_id="1" max_id="${link_qty}"/-->
 
 
 </robot>
