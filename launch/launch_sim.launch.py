@@ -34,16 +34,6 @@ def generate_launch_description():
                         "-entity", "my_bot"],
             output="screen")
           
-    joint_state_pub = Node(package="joint_state_publisher",
-            executable="joint_state_publisher",
-            name="joint_state_publisher",
-            output="screen",
-            parameters=[{"use_sim_time": use_sim_time}])
-
-    ctrl = Node(package="controller_manager",
-            executable="ros2_control_node",
-            parameters=[{"robot_description": "robot"}, controller_params])
-
     robot_controller_spawner = Node(package="controller_manager",
             executable="spawner",
             arguments=["joint_trajectory_controller", "-c", "/controller_manager"])
@@ -57,14 +47,10 @@ def generate_launch_description():
         rsp,
         gazebo,
         spawn_entity,
-        joint_state_pub,
-        ctrl,
         joint_state_broadcaster_spawner,
         RegisterEventHandler(
             event_handler=OnProcessExit(
                 target_action=joint_state_broadcaster_spawner,
-                on_exit=[robot_controller_spawner],
-            )
-        ),
+                on_exit=[robot_controller_spawner],)),
     ])
    
