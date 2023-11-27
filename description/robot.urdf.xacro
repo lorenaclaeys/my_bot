@@ -27,13 +27,13 @@
     <xacro:property name="link_z_size_z" value="0.14" />
     <xacro:property name="link_x_size_x" value="0.092" />
     <xacro:property name="link_x_size_y" value="0.038" />
-    <xacro:property name="link_x_size_z" value="0.025" />
+    <xacro:property name="link_x_size_z" value="0.01" />
     <xacro:property name="link_y_size_x" value="0.045" />
     <xacro:property name="link_y_size_y" value="0.3" />
     <xacro:property name="link_y_size_z" value="0.01" />
     <xacro:property name="x_offset" value="0.007" />
     <xacro:property name="y_offset" value="0.006" />
-    <xacro:property name="mass_base" value="0.04" />
+    <xacro:property name="mass_base" value="0.4" />
     <xacro:property name="mass_x" value="0.3" />
     <xacro:property name="mass_y" value="0.3" />
     <xacro:property name="mass_z" value="0.25" />
@@ -180,9 +180,17 @@
         <collision>
             <origin xyz="0 0 0" rpy="0 1.5708 1.5708"/>
             <geometry>
-                <box size="${link_y_size_x} ${link_y_size_y} ${link_y_size_z}"/>
+                <cylinder length="${link_length}" radius="${link_radius}"/>
             </geometry>
         </collision>
+        <surface>
+			<friction>
+		      <ode>
+		        <mu>100000.0</mu>
+		        <mu2>100000.0</mu2>
+		      </ode>
+			</friction>
+		</surface>
         <xacro:inertial_cylinder mass="${needle_mass/link_qty}" length="${link_length}" radius="${link_radius}">
             <origin xyz="0 0 0" rpy="0 1.5708 1.5708"/>
         </xacro:inertial_cylinder>  
@@ -215,9 +223,17 @@
 	    <collision>
 	        <origin xyz="0 0 0" rpy="0 1.5708 1.5708"/>
 	        <geometry>
-	            <box size="${link_y_size_x} ${link_y_size_y} ${link_y_size_z}"/>
+	            <cylinder length="${link_length}" radius="${link_radius}"/>
 	        </geometry>
 	    </collision>
+	    <surface>
+			<friction>
+		      <ode>
+		        <mu>100000.0</mu>
+		        <mu2>100000.0</mu2>
+		      </ode>
+			</friction>
+		</surface>
 	    <xacro:inertial_cylinder mass="${needle_mass/link_qty}" length="${link_length}" radius="${link_radius}">
 	        <origin xyz="0 0 0" rpy="0 1.5708 1.5708"/>
 	    </xacro:inertial_cylinder>
@@ -243,9 +259,17 @@
 	    <collision>
 	        <origin xyz="0 0 0" rpy="0 1.5708 1.5708"/>
 	        <geometry>
-	            <box size="${link_y_size_x} ${link_y_size_y} ${link_y_size_z}"/>
+	            <cylinder length="${link_length}" radius="${link_radius}"/> 
 	        </geometry>
 	    </collision>
+	    <surface>
+			<friction>
+		      <ode>
+		        <mu>100000.0</mu>
+		        <mu2>100000.0</mu2>
+		      </ode>
+			</friction>
+		</surface>
 	    <xacro:inertial_cylinder mass="${needle_mass/link_qty}" length="${link_length}" radius="${link_radius}">
 	        <origin xyz="0 0 0" rpy="0 1.5708 1.5708"/>
 	    </xacro:inertial_cylinder>
@@ -309,106 +333,6 @@
 
 
 
-<!--  ***** ROS2 GAZEBO CONTROL PACKAGE  *****   -->    
-    <ros2_control name="GazeboSystem" type="system">
-        <hardware>
-            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-        </hardware>
-        <joint name="joint_zx">
-            <command_interface name="position">
-                <param name="min">-${base_size_z/2 + link_z_size_z/2 - link_x_size_z}"</param>
-                <param name="max">"${base_size_z/2 + link_z_size_z/2 - link_x_size_z}"</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="joint_xy">
-            <command_interface name="position">
-                <param name="min">-${link_z_size_x/2 + link_x_size_x/2 - link_z_size_x/2}</param>
-                <param name="max">${link_z_size_x/2 + link_x_size_x/2 - link_z_size_x/2}</param>
-            </command_interface>
-            <state_interface name="position"/> <!--what I want to broadcast-->
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="joint_needle">
-            <command_interface name="position">
-                <param name="min">-${needle_length}</param>
-                <param name="max">${needle_length/2}</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_2_aux_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_2_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_3_aux_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_3_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_4_aux_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_4_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_5_aux_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-        <joint name="link_5_joint">
-            <command_interface name="position">
-                <param name="min">-0.04</param>
-                <param name="max">0.04</param>
-            </command_interface>
-            <state_interface name="position"/>
-            <state_interface name="velocity"/>
-        </joint>
-    </ros2_control>
-
-    <gazebo>
-        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-            <parameters>$(find my_bot)/config/controller.yaml</parameters>
-        </plugin>
-    </gazebo>
 
     
     

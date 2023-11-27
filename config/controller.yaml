@@ -1,3 +1,4 @@
+# This config file is used by ros2_control
 controller_manager:
   ros__parameters:
     update_rate: 100  # Hz
@@ -28,8 +29,6 @@ joint_trajectory_controller:
     state_interfaces:
       - position
       - velocity
-
-
 
 
 
