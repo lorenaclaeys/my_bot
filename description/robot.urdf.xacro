@@ -337,4 +337,116 @@
     <xacro:needle_link base_name="link_4" parent_name="link_3" colour="Purple"/>
     <xacro:needle_link base_name="link_5" parent_name="link_4" colour="White"/>
 
+
+
+
+<!--  ***** ROS2 GAZEBO CONTROL PACKAGE  *****   -->    
+    <ros2_control name="GazeboSystem" type="system">
+        <hardware>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+        <joint name="joint_zx">
+            <command_interface name="position">
+                <param name="min">-${base_size_z/2 + link_z_size_z/2 - link_x_size_z}"</param>
+                <param name="max">"${base_size_z/2 + link_z_size_z/2 - link_x_size_z}"</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint_xy">
+            <command_interface name="position">
+                <param name="min">-${link_z_size_x/2 + link_x_size_x/2 - link_z_size_x/2}</param>
+                <param name="max">${link_z_size_x/2 + link_x_size_x/2 - link_z_size_x/2}</param>
+            </command_interface>
+            <state_interface name="position"/> <!--what I want to broadcast-->
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint_needle">
+            <command_interface name="position">
+                <param name="min">-${needle_length}</param>
+                <param name="max">${needle_length/2}</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_2_aux_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_2_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_3_aux_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_3_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_4_aux_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_4_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_5_aux_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="link_5_joint">
+            <command_interface name="position">
+                <param name="min">-0.04</param>
+                <param name="max">0.04</param>
+            </command_interface>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+    </ros2_control>
+
+    <gazebo>
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+            <parameters>$(find my_bot)/config/controller.yaml</parameters>
+        </plugin>
+    </gazebo>
+
+    
+    
+    
+  
+
+
+
+
 </robot>

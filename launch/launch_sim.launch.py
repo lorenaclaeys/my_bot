@@ -30,8 +30,8 @@ def generate_launch_description():
 
     # Run the spawner node from the gazebo_ros package
     spawn_entity = Node(package="gazebo_ros", executable="spawn_entity.py",
-            arguments=["-topic", "robot_description",
-                        "-entity", "my_bot"],
+                        arguments=["-topic", "robot_description",
+                                   "-entity", "my_bot"],
             output="screen")
           
     robot_controller_spawner = Node(package="controller_manager",
